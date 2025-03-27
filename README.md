@@ -6,8 +6,8 @@
 ### 🚀 프로젝트명: AI 기반 코드 보안 분석기 개발
 (AI-Powered Code Security Analyzer Development)
 
-- **목적**: 소프트웨어 소스 코드에서 보안 취약점을 자동으로 탐지하고, 
-           적절한 보안 권장 사항을 제시하는 AI 기반 서비스 구축
+- **목적**: 소프트웨어 소스 코드에서 보안 취약점을 자동으로 탐지하고,<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;적절한 보안 권장 사항을 제시하는 AI 기반 서비스 구축
 - **핵심기술**: NLP 기반 코드 분석 (GPT-4, CodeBERT) 
                    + 보안 데이터셋 활용 (OWASP, CWE, CVE)
 - **참여인원**: 1인(소프트웨어학과 4학년 2022564004 김다빈)
