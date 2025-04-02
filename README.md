@@ -175,3 +175,6 @@ query = "SELECT * FROM users WHERE id = " + user_input  # 🔥 취약점
   
 - <b>3주차(3/19 ~ 3/25)</b><br>
   <a href="https://github.com/tealight03/CapstoneDesign/tree/main/3week" target="_blank">캡스톤디자인 3주차 연구일지(0325)</a>
+
+- <b>4주차(3/26 ~ 4/1)</b><br>
+  <a href="https://github.com/tealight03/CapstoneDesign/tree/main/4week" target="_blank">캡스톤디자인 4주차 연구일지(0401)</a>
