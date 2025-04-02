@@ -28,11 +28,15 @@ OpenAI 공식 웹사이트에 접속해서 로그인을 한 후,<br>
 이후 GPT-4 API를 사용하려고 했는데.. 지금 사용 권한이 없어서 바로 GPT-4 API를 사용할 수가 없다.<br>
 우선 GPT-3.5 API를 이용해 만들고, 추후 GPT-4 API로 변경하는 것으로 계획을 수정했다.<br>
 
-<img src="" width="800"><br>
+<img src="https://github.com/user-attachments/assets/69465ac2-6665-4d44-8843-9b42141390ad" width="450"><br>
+GPT API를 사용하기 위해서는 OpenAI에 결제 신용카드를 등록해야한다.<br>
 
-<img src="" width="800"><br>
+<img src="https://github.com/user-attachments/assets/2b839aaf-640a-40e5-9b01-f99cc2174e45" width="300"><br>
+신용카드를 등록하고 $5 내에서 API 호출(트래픽)이 가능하게끔 하면 설정하면 된다.<br>
 
-<img src="" width="800"><br>
+<img src="https://github.com/user-attachments/assets/44a72836-4ddf-4f96-a2a4-f8c6af6d3197" width="800"><br>
+그럼 이제 GPT API 사용 권한이 주어진 상태이므로, API를 연결해서 취약점 보고서를 출력하게끔 하면 이렇게 출력된다.<br>
+출력 내용만 좀 더 다듬어달라고 하면 보다 보기 좋은 보고서가 출력될 것 같다.
 
 ### 3) 비고
 <img src="https://github.com/user-attachments/assets/b3aaef78-8d9d-444d-bad0-bca8431ae804" width="800"><br>
