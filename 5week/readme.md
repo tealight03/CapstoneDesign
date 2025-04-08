@@ -20,7 +20,7 @@
 그랬더니 이렇게 점수가 확 다르게 나오는 것을 확인할 수 있었다.<br>
 예제 1, 2, 3번은 각각 해당하는 레이블이 존재하기에 결과가 알맞게 출력되었지만<br>
 4번과 5번은 이에 해당하는 명확한 레이블이 없어서 그전 레이블에 해당하지 않으면<br>
-if-else 구문에서 그 다음 레이블로 처리해버리는 것처럼 레이블 매핑 순서에 따라 결과가 바뀌는 것을 확인할 수 있었다.<br>
+if-else 구문에서 그 다음 레이블로 처리해버리는 것처럼 레이블 매핑 순서에 따라 결과가 바뀌는 것을 확인할 수 있었다.<br><br>
 
 ```
 import torch
@@ -63,7 +63,7 @@ def analyze_code(code_snippet):
 안전한 코드(safe-code)와 또다른 취약점이 내재된 코드(others)를 명확하게 구분하도록 코드를 수정했다.<br>
 
 <b>[참고]</b><br>
-<a href="https://i-am-eden.tistory.com/21" target="_blank">Logit이 무엇일까? what is a Logit?[Eden 블로그]</a>
+<a href="https://i-am-eden.tistory.com/21" target="_blank">Logit이 무엇일까? what is a Logit?[Eden 블로그]</a><br><br>
 
 <img src="https://github.com/user-attachments/assets/61ed1b3d-8059-4d4d-bcbe-0c673aad5044" width="550"><br>
 코드 수정 후 다시 예제 코드를 실행해보니 이번에는 제대로 결과가 출력되는 것을 확인할 수 있었다.<br>
