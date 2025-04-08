@@ -1,0 +1,42 @@
+code_snippet,label
+"user_input = request.args.get('username')
+query = ""SELECT * FROM users WHERE name = '"" + user_input + ""'""",SQL_Injection
+"query = ""SELECT * FROM products WHERE id = "" + product_id",SQL_Injection
+"sql = ""DELETE FROM orders WHERE order_id = "" + order_id",SQL_Injection
+"username = input(""Username: "")
+sql = ""SELECT * FROM accounts WHERE user = '"" + username + ""'""",SQL_Injection
+"query = ""INSERT INTO logs (message) VALUES ('"" + log_message + ""')""",SQL_Injection
+"search = request.args.get('search')
+query = ""SELECT * FROM items WHERE description LIKE '%"" + search + ""%'""",SQL_Injection
+"query = ""SELECT * FROM users WHERE email = '"" + email + ""' AND password = '"" + password + ""'""",SQL_Injection
+"sql = ""SELECT * FROM books WHERE title = '"" + title + ""'""",SQL_Injection
+"user_id = request.args.get('id')
+query = ""SELECT * FROM users WHERE id = "" + user_id",SQL_Injection
+"order = request.args.get('order')
+sql = ""SELECT * FROM sales ORDER BY "" + order",SQL_Injection
+"sql = ""SELECT * FROM feedback WHERE comment = '"" + comment + ""'""",SQL_Injection
+"query = ""SELECT * FROM news WHERE category = '"" + category + ""'""",SQL_Injection
+"sql = ""UPDATE users SET last_login = NOW() WHERE name = '"" + name + ""'""",SQL_Injection
+"comment = request.form['comment']
+sql = ""INSERT INTO comments (text) VALUES ('"" + comment + ""')""",SQL_Injection
+"sql = ""SELECT * FROM login WHERE user = '"" + user + ""' AND pass = '"" + pwd + ""'""",SQL_Injection
+"user = request.form['user']
+sql = ""SELECT * FROM user_data WHERE username = '"" + user + ""'""",SQL_Injection
+"query = ""SELECT * FROM transactions WHERE account_id = '"" + acc_id + ""'""",SQL_Injection
+"email = request.args.get('email')
+sql = ""SELECT * FROM customers WHERE email = '"" + email + ""'""",SQL_Injection
+"id = input(""Enter ID: "")
+sql = ""DELETE FROM employees WHERE id = '"" + id + ""'""",SQL_Injection
+"sql = ""SELECT * FROM logs WHERE level = '"" + log_level + ""'""",SQL_Injection
+"query = ""SELECT * FROM reviews WHERE rating = "" + rating",SQL_Injection
+"query = ""SELECT * FROM inventory WHERE item_code = '"" + code + ""'""",SQL_Injection
+"sql = ""SELECT * FROM patients WHERE name = '"" + patient_name + ""'""",SQL_Injection
+"category = request.args.get('cat')
+sql = ""SELECT * FROM blog WHERE category = '"" + category + ""'""",SQL_Injection
+"sql = ""SELECT * FROM devices WHERE ip_address = '"" + ip + ""'""",SQL_Injection
+"sql = ""SELECT * FROM issues WHERE status = '"" + status + ""'""",SQL_Injection
+"search_term = input(""Search: "")
+sql = ""SELECT * FROM data WHERE content LIKE '%"" + search_term + ""%'""",SQL_Injection
+"sql = ""SELECT * FROM teachers WHERE subject = '"" + subject + ""'""",SQL_Injection
+"sql = ""SELECT * FROM forums WHERE topic = '"" + topic + ""'""",SQL_Injection
+"query = ""SELECT * FROM files WHERE filename = '"" + filename + ""'""",SQL_Injection

@@ -1,0 +1,321 @@
+code_snippet,label
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"@app.route('/search')
+def search():
+    query = request.args.get('q')
+    return ""<div>"" + query + ""</div>"" ",XSS
+"from flask import Flask, request
+app = Flask(__name__)
+@app.route('/')
+def home():
+    name = request.args.get('name')
+    return f""<h1>Hello {name}</h1>"" ",XSS
+"@app.route('/comment')
+def comment():
+    user_comment = request.args.get('comment')
+    return ""<p>"" + user_comment + ""</p>"" ",XSS
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"password = ""root1234""
+connect_to_db(password)",Hardcoded_Password
+"api_key = ""sk-abc-123""
+access_service(api_key)",Hardcoded_Password
+"config = {""username"": ""admin"", ""password"": ""adminpass""}
+login(config)",Hardcoded_Password
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"query = ""SELECT * FROM users WHERE id = %s""
+cursor.execute(query, (user_id,))",Safe_Code
+"stmt = ""INSERT INTO users (name, age) VALUES (?, ?)""
+cursor.execute(stmt, (name, age))",Safe_Code
+"password = getpass.getpass(""Enter password: "")
+login(user, password)",Safe_Code
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
+"with open(""log.txt"", ""a"") as log:
+    log.write(""User logged in."")",Other
+"def greet(name):
+    print(f""Hello, {name}!"")",Other
+"for i in range(10):
+    print(i)",Other
