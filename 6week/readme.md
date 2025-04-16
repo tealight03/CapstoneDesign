@@ -1,7 +1,8 @@
 # 📑 캡스톤디자인 6주차 연구일지(0415)
 ### 1) 계획
+- ngrok으로 API 서비스 상태 확인
 - FastAPI를 활용한 REST API 구현
-- Render를 통해 API 서비스 배포
+- GitHub, HuggingFace, Render를 활용한 API 서비스 배포 준비
 
 ### 2) 진행 상황
 <img src="https://github.com/user-attachments/assets/b0a4ae5f-9fd0-48ef-a8a1-3f692c3cae75" width="650"><br>
@@ -18,7 +19,10 @@ ngrok을 이용하기 위해서는 ngrok 인증토큰이 필요해서 ngrok 웹�
 ```
 !ngrok config add-authtoken <My ngrok AuthToken>
 ```
-명령어를 실행해주면 ngrok으로 서비스를 테스트할 수 있다.<br>
+명령어를 실행해주면 ngrok으로 서비스를 테스트할 수 있다.<br><br>
+
+<b>[참고]</b><br>
+<a href="https://velog.io/@ejaman/%EB%A1%9C%EC%BB%AC-%ED%98%B8%EC%8A%A4%ED%8A%B8-%EC%99%B8%EB%B6%80%EC%97%90%EC%84%9C-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0-Ngrok" target="_blank">[Velog]로컬 호스트 외부에서 실행하기 Ngrok!</a><br>
 
 ```
 import requests
@@ -51,6 +55,12 @@ print("✅ 결과:\n", response.json())
 테스트 코드에 대해 올바른 분석 보고서가 출력된 것으로 보아, API 동작에 문제가 없는 것으로 보인다.<br>
 이어서 API 서버 배포 작업을 진행해도 될 것 같다.<br>
 
-
+원래 계획은 GitHub에 모델과 서비스 배포 파일을 모두 업로드하고 Render로 배포하는 것이었는데,<br>
+AI 모델 내의 model.safetensors 파일 용량이 너무 커서 계속 파일 업로드에 실패해서<br>
+GitHub에는 서비스 배포 파일만 업로드하고, 모델 파일은 HuggingFace에 업로드해서<br>
+Render로 배포하는 방식으로 변경해서 진행할 계획이다.<br>
 
 ### 3) 비고
+<img src="https://github.com/user-attachments/assets/7ed447f2-6554-4d04-9bf4-a6ca389a0b79" width="600"><br>
+파일 용량 때문인지 HuggingFace에도 업로드가 안 된다... 어떻게 하면 해결할 수 있을까<br>
+이것저것 시도해봐도 해결이 안 되어서 일단 다음 주차로 넘기고 이어서 진행해야할 것 같다.
