@@ -62,5 +62,6 @@ Render로 배포하는 방식으로 변경해서 진행할 계획이다.<br>
 
 ### 3) 비고
 <img src="https://github.com/user-attachments/assets/7ed447f2-6554-4d04-9bf4-a6ca389a0b79" width="600"><br>
+파일 용량으로 인해 계획 변경 후, HuggingFace CLI 환경으로 모델을 업로드하려고 했는데<br>
 파일 용량 때문인지 HuggingFace에도 업로드가 안 된다... 어떻게 하면 해결할 수 있을까<br>
 이것저것 시도해봐도 해결이 안 되어서 일단 다음 주차로 넘기고 이어서 진행해야할 것 같다.
