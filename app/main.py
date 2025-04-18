@@ -13,9 +13,10 @@ app = FastAPI()
 class CodeRequest(BaseModel):
     code: str
 
-# ✅ 모델 로드
-tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
-model = AutoModelForSequenceClassification.from_pretrained(model_path, local_files_only=True)
+# 모델 경로를 Hugging Face 경로로 설정
+model_path = "davin0706/codebert-finetuned-v5"
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
 # ✅ OpenAI 클라이언트 초기화
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
