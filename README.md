@@ -3,10 +3,11 @@
 프로젝트 기획서부터 프로젝트 결과물, 주차별 연구일지를 순차적으로 정리할 계획입니다.
 
 ## 📌 프로젝트 기획서
-### 🚀 프로젝트명: AI 기반 코드 보안 분석기 개발(AI-Powered Code Security Analyzer Development)
+### 🚀 프로젝트명: AI 기반 코드 보안 분석기 개발
+(AI-Powered Code Security Analyzer Development)
 
-- **목적**: 소프트웨어 소스 코드에서 보안 취약점을 자동으로 탐지하고,<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;적절한 보안 권장 사항을 제시하는 AI 기반 서비스 구축
+- **목적**: 소프트웨어 소스 코드에서 보안 취약점을 자동으로 탐지하고, 
+           적절한 보안 권장 사항을 제시하는 AI 기반 서비스 구축
 - **핵심기술**: NLP 기반 코드 분석 (GPT-4, CodeBERT) 
                    + 보안 데이터셋 활용 (OWASP, CWE, CVE)
 - **참여인원**: 1인(소프트웨어학과 4학년 2022564004 김다빈)
@@ -41,8 +42,7 @@
 | **AI 모델** | CodeBERT, GPT-4 API, AST 분석 |
 | **보안 데이터** | OWASP, CWE, CVE 등 보안 취약점 데이터셋 활용 |
 | **백엔드** | FastAPI |
-| **프론트엔드** | React (Next.js) 또는 WordPress REST API 연동 |
-| **DB (로그 저장용)** | PostgreSQL |
+| **프론트엔드** | WordPress REST API 연동 |
 | **배포 환경** | Render |
 
 ## **3️⃣ AI 모델 설계**
@@ -151,8 +151,9 @@ query = "SELECT * FROM users WHERE id = " + user_input  # 🔥 취약점
 | 4주차(3/26 ~ 4/1) | GPT-4 API 연동하여 취약점 보고서 생성 서비스 구현 |
 | 5주차(4/2 ~ 4/8) | FastAPI로 REST API 구현(1) |
 | 6주차(4/9 ~ 4/15) | FastAPI로 REST API 구현(2) |
-| 7주차(4/16 ~ 4/22) | 보안 점수 시스템 개발 & 테스트 |
-| 8주차(4/30 ~ 5/6) | API 배포 (Render) 및 프로젝트 발표 준비 |
+| 7주차(4/16 ~ 4/22) | API 배포 (Render) 및 테스트 |
+| 8주차(4/23 ~ 4/29) | 모델 추가 학습 및 프로젝트 결과물 발표 준비(1) |
+| 9주차(4/30 ~ 5/6) | 프로젝트 결과물 발표 준비(2) |
 
 ## **6️⃣ 기대 효과**
 
