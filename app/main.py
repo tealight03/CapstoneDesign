@@ -94,35 +94,47 @@ def generate_report(code_snippet: str, label: str) -> str:
 
 # GPT API 결과에서 label 추출
 def extract_label_from_report(report: str) -> str:
-    # "**SQL_Injection**", "**XSS**" 등 강조된 취약점 명을 추출
-    match = re.search(r"발견된 취약점은\s+\*\*(\w+)\*\*", report)
+    match = re.search(r"취약점(?:은|이)?\s+\*\*['\"]?(\w+)['\"]?\*\*", report)
     if match:
-        return match.group(1)
+        candidate = match.group(1)
+        if candidate == "Safe_Code":
+            for item in score_map.values():
+                if item["label"] != "Safe_Code" and item["label"] in report:
+                    return item["label"]
+        return candidate
 
-    # 대체 케이스: label이 포함된 단어가 있는지 체크
     for item in score_map.values():
         if item["label"] in report:
             return item["label"]
-    
     return None
 
 # ✅ API 엔드포인트
 @app.post("/analyze")
 def analyze(request: CodeRequest):
-    result = analyze_code(request.code)  # CodeBERT 기반 예측
-    gpt_report = generate_report(request.code, result["label"])  # GPT 기반 리포트 생성
-    gpt_label = extract_label_from_report(gpt_report)  # GPT 리포트에서 라벨 추출
+    # 1. CodeBERT 예측 (보조 정보)
+    bert_result = analyze_code(request.code)
 
-    # GPT 라벨이 CodeBERT와 다르면 덮어쓰기
-    if gpt_label and gpt_label in [v["label"] for v in score_map.values()] and gpt_label != result["label"]:
-        updated = [v for v in score_map.values() if v["label"] == gpt_label][0]
-        result["label"] = updated["label"]
-        result["prediction"] = updated["msg"]
-        result["security_score"] = updated["score"]
+    # 2. GPT 리포트 생성
+    gpt_report = generate_report(request.code, label=bert_result["model_label"])
+
+    # 3. GPT 리포트 기반 라벨 추출
+    gpt_label = extract_label_from_report(gpt_report)
+
+    # 4. GPT 판단이 유효할 경우 최종 결과로 사용
+    if gpt_label and gpt_label in [v["label"] for v in score_map.values()]:
+        final = [v for v in score_map.values() if v["label"] == gpt_label][0]
+    else:
+        # fallback: CodeBERT 결과 사용
+        final = {
+            "label": bert_result["model_label"],
+            "score": bert_result["model_score"],
+            "msg": bert_result["model_prediction"]
+        }
 
     return {
-        "prediction": result["prediction"],
-        "label": result["label"],
-        "security_score": result["security_score"],
-        "report": gpt_report
+        "prediction": final["msg"],
+        "label": final["label"],
+        "security_score": final["score"],
+        "report": gpt_report,
+        "model_reference": bert_result  # 참고용으로 CodeBERT 결과도 같이 리턴
     }
