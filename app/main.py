@@ -94,18 +94,22 @@ def generate_report(code_snippet: str, label: str) -> str:
 
 # GPT API 결과에서 label 추출
 def extract_label_from_report(report: str) -> str:
-    match = re.search(r"취약점(?:은|이)?\s+\*\*['\"]?(\w+)['\"]?\*\*", report)
-    if match:
-        candidate = match.group(1)
-        if candidate == "Safe_Code":
-            for item in score_map.values():
-                if item["label"] != "Safe_Code" and item["label"] in report:
-                    return item["label"]
-        return candidate
+    try:
+        match = re.search(r"취약점(?:은|이)?\s+\*\*['\"]?(\w+)['\"]?\*\*", report)
+        if match:
+            candidate = match.group(1)
+            if candidate == "Safe_Code":
+                for item in score_map.values():
+                    if item["label"] != "Safe_Code" and item["label"] in report:
+                        return item["label"]
+            return candidate
 
-    for item in score_map.values():
-        if item["label"] in report:
-            return item["label"]
+        for item in score_map.values():
+            if item["label"] in report:
+                return item["label"]
+    except Exception as e:
+        print(f"⚠️ extract_label_from_report 예외 발생: {e}")
+        
     return None
 
 # ✅ API 엔드포인트
@@ -115,14 +119,14 @@ def analyze(request: CodeRequest):
     bert_result = analyze_code(request.code)
 
     # 2. GPT 리포트 생성
-    gpt_report = generate_report(request.code, label=bert_result["model_label"])
+    gpt_report = generate_report(request.code, label=bert_result["label"])
 
     # 3. GPT 리포트 기반 라벨 추출
     gpt_label = extract_label_from_report(gpt_report)
 
     # 4. GPT 판단이 유효할 경우 최종 결과로 사용
     if gpt_label and gpt_label in [v["label"] for v in score_map.values()]:
-        final = [v for v in score_map.values() if v["label"] == gpt_label][0]
+        final = next(v for v in score_map.values() if v["label"] == gpt_label)
     else:
         # fallback: CodeBERT 결과 사용
         final = {
