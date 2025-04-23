@@ -109,7 +109,6 @@ def extract_label_from_report(report: str) -> str:
                 return item["label"]
     except Exception as e:
         print(f"⚠️ extract_label_from_report 예외 발생: {e}")
-        
     return None
 
 # ✅ API 엔드포인트
