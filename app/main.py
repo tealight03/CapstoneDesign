@@ -126,9 +126,9 @@ def analyze(request: CodeRequest):
     else:
         # fallback: CodeBERT 결과 사용
         final = {
-            "label": bert_result["model_label"],
-            "score": bert_result["model_score"],
-            "msg": bert_result["model_prediction"]
+            "label": bert_result["label"],
+            "score": bert_result["security_score"],
+            "msg": bert_result["prediction"]
         }
 
     return {
