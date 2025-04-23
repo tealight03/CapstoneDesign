@@ -1,4 +1,5 @@
 import os
+import re
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -91,11 +92,27 @@ def generate_report(code_snippet: str, label: str) -> str:
     )
     return response.choices[0].message.content
 
+# GPT API 결과에서 label 추출
+def extract_label_from_report(report: str) -> str:
+    for item in score_map.values():
+        if item["label"] in report:
+            return item["label"]
+    return None
+
 # ✅ API 엔드포인트
 @app.post("/analyze")
 def analyze(request: CodeRequest):
     result = analyze_code(request.code)
     gpt_report = generate_report(request.code, result["label"])
+    gpt_label = extract_label_from_report(gpt_report)
+
+    if gpt_label and gpt_label != result["label"]:
+        for item in score_map.values():
+            if item["label"] == gpt_label:
+                result["label"] = item["label"]
+                result["prediction"] = item["msg"]
+                result["security_score"] = item["score"]
+
     return {
         "prediction": result["prediction"],
         "label": result["label"],
