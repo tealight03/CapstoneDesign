@@ -94,24 +94,31 @@ def generate_report(code_snippet: str, label: str) -> str:
 
 # GPT API 결과에서 label 추출
 def extract_label_from_report(report: str) -> str:
+    # "**SQL_Injection**", "**XSS**" 등 강조된 취약점 명을 추출
+    match = re.search(r"발견된 취약점은\s+\*\*(\w+)\*\*", report)
+    if match:
+        return match.group(1)
+
+    # 대체 케이스: label이 포함된 단어가 있는지 체크
     for item in score_map.values():
         if item["label"] in report:
             return item["label"]
+    
     return None
 
 # ✅ API 엔드포인트
 @app.post("/analyze")
 def analyze(request: CodeRequest):
-    result = analyze_code(request.code)
-    gpt_report = generate_report(request.code, result["label"])
-    gpt_label = extract_label_from_report(gpt_report)
+    result = analyze_code(request.code)  # CodeBERT 기반 예측
+    gpt_report = generate_report(request.code, result["label"])  # GPT 기반 리포트 생성
+    gpt_label = extract_label_from_report(gpt_report)  # GPT 리포트에서 라벨 추출
 
-    if gpt_label and gpt_label != result["label"]:
-        for item in score_map.values():
-            if item["label"] == gpt_label:
-                result["label"] = item["label"]
-                result["prediction"] = item["msg"]
-                result["security_score"] = item["score"]
+    # GPT 라벨이 CodeBERT와 다르면 덮어쓰기
+    if gpt_label and gpt_label in [v["label"] for v in score_map.values()] and gpt_label != result["label"]:
+        updated = [v for v in score_map.values() if v["label"] == gpt_label][0]
+        result["label"] = updated["label"]
+        result["prediction"] = updated["msg"]
+        result["security_score"] = updated["score"]
 
     return {
         "prediction": result["prediction"],
