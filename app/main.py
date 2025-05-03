@@ -114,7 +114,7 @@ def extract_label_from_report(report: str) -> str:
 # ✅ API 엔드포인트
 @app.post("/analyze")
 def analyze(request: CodeRequest):
-    # 1. CodeBERT 예측 (보조 정보)
+    # 1. CodeBERT 예측
     bert_result = analyze_code(request.code)
 
     # 2. GPT 리포트 생성
@@ -123,11 +123,12 @@ def analyze(request: CodeRequest):
     # 3. GPT 리포트 기반 라벨 추출
     gpt_label = extract_label_from_report(gpt_report)
 
-    # 4. GPT 판단이 유효할 경우 최종 결과로 사용
-    if gpt_label and gpt_label in [v["label"] for v in score_map.values()]:
-        final = next(v for v in score_map.values() if v["label"] == gpt_label)
+    # 4. GPT 판단을 우선시해 최종 결과 구성
+    if gpt_label and gpt_label in score_map:
+        # GPT 판단을 최우선 반영
+        final = score_map[gpt_label]
     else:
-        # fallback: CodeBERT 결과 사용
+        # GPT 판단이 불명확하거나 잘못된 경우 CodeBERT 결과 fallback
         final = {
             "label": bert_result["label"],
             "score": bert_result["security_score"],
@@ -139,5 +140,5 @@ def analyze(request: CodeRequest):
         "label": final["label"],
         "security_score": final["score"],
         "report": gpt_report,
-        "model_reference": bert_result  # 참고용으로 CodeBERT 결과도 같이 리턴
+        "model_reference": bert_result
     }
