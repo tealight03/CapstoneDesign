@@ -95,24 +95,31 @@ def generate_report(code_snippet: str, label: str) -> str:
 # GPT API 결과에서 label 추출
 def extract_label_from_report(report: str) -> str:
     try:
-        match = re.search(r"취약점(?:은|이)?\s+\*\*['\"]?([\w_]+)['\"]?\*\*"
-, report)
+        # 정규식으로 취약점 라벨 추출 시도
+        match = re.search(r"취약점(?:은|이)?[^가-힣]{0,5}\*\*['\"]?(.+?)['\"]?\*\*", report)
         if match:
-            # 정규식 매치 패턴 찾은 경우
-            candidate = match.group(1)
+            candidate = match.group(1).strip().replace(" ", "_")
+            print(f"🔍 [정규식 매칭] 추출된 candidate: '{candidate}'")
+
+            # 안전한 코드로 판명되었을 경우
             if candidate == "Safe_Code":
-                # 오탐을 방지하기 위해 다른 라벨 찾아보기
                 for item in score_map.values():
                     if item["label"] != "Safe_Code" and item["label"] in report:
+                        print(f"⚠️ Safe_Code 오탐 감지, 대체 라벨 사용: '{item['label']}'")
                         return item["label"]
+            print(f"✅ 최종 선택된 라벨 (정규식 기준): '{candidate}'")
             return candidate
 
-        # 정규식 매칭 실패한 경우
+        # fallback: 정규식 실패 시, 본문 내에서 수동 탐색
         for item in score_map.values():
             if item["label"] in report:
+                print(f"🔁 [본문 탐색] '{item['label']}' 라벨이 보고서에 직접 포함되어 있음")
                 return item["label"]
+
     except Exception as e:
         print(f"⚠️ extract_label_from_report 예외 발생: {e}")
+    
+    print("❌ 라벨 추출 실패: None 반환")
     return None
 
 # ✅ API 엔드포인트
