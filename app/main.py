@@ -147,6 +147,11 @@ def extract_label_from_report(report: str) -> str:
     print("❌ 라벨 추출 실패: None 반환")
     return None
 
+# / 를 서버 헬스 체크 엔드포인트로 활용
+@app.get("/", summary="헬스 체크")
+def root():
+    return {"message": "🚀 Code Security Analyzer is running!"}
+
 # ✅ API 엔드포인트
 @app.post("/analyze", summary = "소스 코드 보안 분석", response_model = AnalyzeResponse)
 def analyze(request: CodeRequest = Body(...)):
