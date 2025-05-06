@@ -22,11 +22,14 @@ async function analyzeCode() {
     const data = await response.json();
 
     resultBox.innerHTML = `
-        🛡️ <strong>${data.prediction}</strong><br>
-        🔖 <strong>라벨:</strong> ${data.label}<br>
-        📊 <strong>보안 점수:</strong> ${data.security_score}<br><br>
-        📄 <strong>보안 분석 리포트</strong><br><hr>
-        <div>${data.report.replace(/\n/g, "<br>")}</div>`;
+    <p>🛡️ <strong>${data.prediction}</strong></p>
+    <p>🔖 <strong>라벨:</strong> ${data.label}</p>
+    <p>📊 <strong>보안 점수:</strong> ${data.security_score}</p>
+    <br>
+    <h3>📄 보안 분석 리포트</h3>
+    <hr>
+    <div>${marked.parse(data.report)}</div>`;
+
     } catch (error) {
         resultBox.textContent = "❌ 오류: " + error.message;
     } finally {

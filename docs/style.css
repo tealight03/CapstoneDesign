@@ -5,6 +5,25 @@ body {
     padding: 40px;
 }
 
+.result-box h3 {
+    margin-top: 20px;
+    color: #333;
+}
+
+.result-box code {
+    background-color: #eee;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.result-box pre {
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
 .container {
     max-width: 800px;
     margin: auto;
