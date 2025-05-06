@@ -3,7 +3,7 @@ async function analyzeCode() {
     const resultBox = document.getElementById("result");
     const loading = document.getElementById("loading");
 
-    resultBox.textContent = "";
+    resultBox.innerHTML = "";
     loading.classList.remove("hidden");
 
     try {
@@ -15,24 +15,32 @@ async function analyzeCode() {
             body: JSON.stringify({ code })
         });
 
-    if (!response.ok) {
-        throw new Error("서버 오류가 발생했습니다.");
-    }
+        if (!response.ok) {
+            throw new Error("서버 오류가 발생했습니다.");
+        }
 
-    const data = await response.json();
+        const data = await response.json();
 
-    resultBox.innerHTML = `
-    <p>🛡️ <strong>${data.prediction}</strong></p>
-    <p>🔖 <strong>라벨:</strong> ${data.label}</p>
-    <p>📊 <strong>보안 점수:</strong> ${data.security_score}</p>
-    <br>
-    <h3>📄 보안 분석 리포트</h3>
-    <hr>
-    <div>${marked.parse(data.report)}</div>`;
+        // 📌 이후 내용만 남기고 앞부분 제거
+        const coreReport = data.report.split("📌")[1] || "";
 
+        // 이모지 기준으로 보고서 내용 분할
+        const sections = coreReport.split(/\n(?=📌|💣|🛠|✅)/).filter(Boolean);
+
+        // 마크다운 렌더링 + 구역마다 <hr>로 구분
+        const parsedSections = sections.map(section => marked.parse(section.trim())).join("<hr>");
+
+        resultBox.innerHTML = `
+            <p>🛡️ <strong>${data.prediction}</strong></p>
+            <p>🔖 <strong>라벨:</strong> ${data.label}</p>
+            <p>📊 <strong>보안 점수:</strong> ${data.security_score}</p>
+            <h3>📄 보안 분석 리포트</h3>
+            <hr>
+            ${parsedSections}
+        `;
     } catch (error) {
         resultBox.textContent = "❌ 오류: " + error.message;
     } finally {
         loading.classList.add("hidden");
     }
-}  
+}
