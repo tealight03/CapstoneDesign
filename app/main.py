@@ -57,6 +57,37 @@ score_map = {
     4: {"label": "Other", "score": 70, "msg": "⚠️ 잠재적 취약점이 있는 코드 (Other)"}
 }
 
+# 라벨 확인 함수
+def resolve_final_label_score(bert_label: str, gpt_label: str = None) -> dict:
+    print(f"🔍 [라벨 결정] CodeBERT 라벨: '{bert_label}', GPT 라벨: '{gpt_label}'")
+    final_entry = None
+
+    # 1. GPT 라벨이 존재하고 CodeBERT와 다르면 우선 적용 시도
+    if gpt_label and gpt_label.lower() != bert_label.lower():
+        for entry in score_map.values():
+            if entry["label"].lower() == gpt_label.lower():
+                final_entry = entry
+                print(f"✅ [GPT 라벨 채택] '{gpt_label}'에 해당하는 라벨 정보 적용")
+                break
+        if not final_entry:
+            print(f"⚠️ [GPT 라벨 미일치] GPT 라벨 '{gpt_label}'이 유효하지 않음. CodeBERT 결과로 fallback")
+
+    # 2. fallback: CodeBERT 라벨 기반
+    if not final_entry:
+        for entry in score_map.values():
+            if entry["label"].lower() == bert_label.lower():
+                final_entry = entry
+                print(f"🔁 [Fallback] CodeBERT 라벨 '{bert_label}' 기반 결과 적용")
+                break
+
+    if final_entry:
+        print(f"🏁 [최종 선택] 라벨: {final_entry['label']}, 점수: {final_entry['score']}, 메시지: {final_entry['msg']}")
+    else:
+        print("❌ [에러] 라벨 매핑 실패: 기본값 반환 예정")
+
+    return final_entry
+
+
 # ✅ 보안 분석 함수
 def analyze_code(code_snippet: str):
     inputs = tokenizer(code_snippet, return_tensors="pt", truncation=True, padding="max_length", max_length=128)
@@ -162,38 +193,16 @@ def analyze(request: CodeRequest = Body(...)):
     bert_result = analyze_code(request.code)
 
     # 2. GPT 보고서 생성
-    gpt_report = generate_report(request.code)
+    gpt_report = generate_report(request.code, label=bert_result["label"])
 
     # 3. GPT 보고서에서 라벨 추출
-    gpt_label = extract_label_from_report(gpt_report, label=bert_result["label"])
+    gpt_label = extract_label_from_report(gpt_report)
 
     # 4. GPT 라벨이 존재하고, CodeBERT 라벨과 다르다면 GPT 결과를 반영
-    if gpt_label and gpt_label != bert_result["label"]:
-        matched_entry = None
-
-        # 라벨 중 GPT 보고서의 라벨과 일치하는 것이 있는지 확인
-        for entry in score_map.values():
-            label_key = entry["label"].lower()
-            if label_key == gpt_label.lower():
-                matched_entry = entry
-                break
-        # 일치하는 라벨이 있다면 GPT 보고서로 수정
-        if matched_entry:
-            final = matched_entry
-        else:
-            # fallback: CodeBERT 결과 사용
-            final = {
-                "label": bert_result["label"],
-                "score": bert_result["security_score"],
-                "msg": bert_result["prediction"]
-            }
-    else:
-        # GPT 결과가 없거나 같을 경우, CodeBERT 그대로 사용
-        final = {
-            "label": bert_result["label"],
-            "score": bert_result["security_score"],
-            "msg": bert_result["prediction"]
-        }
+    final = resolve_final_label_score(
+        bert_label=bert_result["label"],
+        gpt_label=gpt_label
+    )
 
     return {
         "prediction": final["msg"],
@@ -215,21 +224,23 @@ def analyze(request: CodeRequest = Body(...)):
 def download_docx(request: CodeRequest):
     # 1. 모델 예측 및 리포트 생성
     bert_result = analyze_code(request.code)
-    gpt_report = generate_report(request.code, bert_result["label"])
+    gpt_report = generate_report(request.code, label=bert_result["label"])
     gpt_label = extract_label_from_report(gpt_report)
 
-    final_label = gpt_label or bert_result["label"]
-    final_score = bert_result["security_score"]
-    final_msg = bert_result["prediction"]
+    final = resolve_final_label_score(
+        bert_label=bert_result["label"],
+        gpt_label=gpt_label
+    )
+    
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
     # 2. 문서 객체 생성
     doc = Document()
     doc.add_heading("AI 기반 보안 분석 리포트", 0)
     doc.add_paragraph(f"분석 일시: {timestamp}")
-    doc.add_paragraph(f"예측된 취약점 라벨: {final_label}")
-    doc.add_paragraph(f"보안 점수: {final_score}")
-    doc.add_paragraph(f"분석 요약 메시지: {final_msg}")
+    doc.add_paragraph(f"예측된 취약점 라벨: {final['label']}")
+    doc.add_paragraph(f"보안 점수: {final['score']}")
+    doc.add_paragraph(f"분석 요약 메시지: {final['msg']}")
     doc.add_paragraph("상세 보안 리포트:")
     doc.add_paragraph(gpt_report)
 
