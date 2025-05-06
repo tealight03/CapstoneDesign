@@ -42,11 +42,18 @@ async function analyzeCode() {
         `;
 
         // 카드 섹션으로 내용 구성
-        const parsedSections = sections.map(section => `
-            <div class="section-card">
-                ${marked.parse(section.trim())}
-            </div>
-        `).join("");
+        const parsedSections = sections.map(section => {
+            const lines = section.trim().split('\n');
+            const title = lines[0].trim();              // 📌 ~~~ 제목
+            const body = lines.slice(1).join('\n');     // 나머지 본문
+        
+            return `
+                <div class="section-card">
+                    <h3>${title}</h3>
+                    <div class="section-body">${marked.parse(body)}</div>
+                </div>
+            `;
+        }).join("");
 
         // 전체 결과 출력
         resultBox.innerHTML = `

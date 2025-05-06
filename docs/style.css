@@ -89,18 +89,22 @@ button:hover {
     background-color: #f7f9fc;
     padding: 1.2rem;
     margin: 0.3rem 0;
-    font-size: 1.15rem;
-    font-weight: 600;
     border-left: 5px solid #007bff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    text-align: left;
 }
 
 .section-card h3 {
     margin: 0.4rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.35rem;  /* h3 크기 */
+    font-weight: 700;
+    color: #222;
+}
+
+.section-body {
+    font-size: 16px;     /* 본문 일반 텍스트 크기 */
+    line-height: 1.6;
+    color: #333;
 }
 
 .summary {
