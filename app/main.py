@@ -78,10 +78,10 @@ def analyze_code(code_snippet: str):
     }
 
 # ✅ GPT 리포트 생성 함수
-def generate_report(code_snippet: str, label: str) -> str:
+def generate_report(code_snippet: str) -> str:
     prompt = f"""
 당신은 보안 분석 전문가입니다.
-아래의 소스 코드에서 감지된 취약점은 **'{label}'** 입니다.
+아래의 소스 코드를 정밀히 분석하여 보안 취약점을 진단하고, 아래 형식에 따라 보고서를 작성해주세요.
 
 [취약 코드]
 {code_snippet.rstrip()}
@@ -149,18 +149,18 @@ def extract_label_from_report(report: str) -> str:
     return None
 
 # / 를 서버 헬스 체크 엔드포인트로 활용
-@app.get("/", summary="헬스 체크")
+@app.get("/", summary="API 서버 헬스 체크")
 def root():
     return {"message": "🚀 Code Security Analyzer is running!"}
 
 # ✅ API 엔드포인트
-@app.post("/analyze", summary = "소스 코드 보안 분석", response_model = AnalyzeResponse)
+@app.post("/analyze", summary = "소스 코드 보안 취약점 분석", response_model = AnalyzeResponse)
 def analyze(request: CodeRequest = Body(...)):
     # 1. CodeBERT 결과
     bert_result = analyze_code(request.code)
 
     # 2. GPT 보고서 생성
-    gpt_report = generate_report(request.code, label=bert_result["label"])
+    gpt_report = generate_report(request.code)
 
     # 3. GPT 보고서에서 라벨 추출
     gpt_label = extract_label_from_report(gpt_report)
@@ -201,44 +201,6 @@ def analyze(request: CodeRequest = Body(...)):
         "model_reference": bert_result
     }
 
-# API 분석 보고서 pdf 다운로드
-@app.post("/report/pdf", 
-            summary="PDF 형식의 취약점 보고서 다운로드",
-            description="""
-            입력된 소스 코드를 기반으로 CodeBERT와 GPT API를 활용해 보안 취약점을 분석하여
-            취약점 종류, 점수, 설명, 공격 시나리오, 보완 방안이 포함된 분석 보고서를
-            PDF 파일 형식으로 다운로드할 수 있습니다.
-            """
-)
-def generate_pdf_report(request: CodeRequest):
-    from docx import Document  # 다른 곳과 충돌 방지용
-    from weasyprint import HTML
-    from markdown import markdown
-
-    # 1. 분석 결과 생성
-    result = analyze_code(request.code)
-    gpt_report = generate_report(request.code, result["label"])
-
-    # 2. 마크다운을 HTML로 변환
-    html_content = markdown(f"""
-# AI 보안 분석 리포트
-
-- 날짜: {datetime.now().strftime('%Y-%m-%d %H:%M')}
-- 라벨: **{result['label']}**
-- 점수: **{result['security_score']}**
-
----
-
-{gpt_report}
-    """)
-
-    # 3. HTML → PDF
-    file_name = f"report_{uuid.uuid4().hex}.pdf"
-    output_path = f"/tmp/{file_name}"
-    HTML(string=html_content).write_pdf(output_path)
-
-    return FileResponse(output_path, filename="report.pdf", media_type="application/pdf")
-
 # API 분석 보고서 docx 다운로드
 @app.post("/report/docx", 
             summary="DOCX 형식의 취약점 보고서 다운로드", 
@@ -246,8 +208,6 @@ def generate_pdf_report(request: CodeRequest):
             입력된 소스 코드를 기반으로 CodeBERT와 GPT API를 활용해 보안 취약점을 분석하여
             취약점 종류, 점수, 설명, 공격 시나리오, 보완 방안이 포함된 분석 보고서를
             Word 파일 형식으로 다운로드할 수 있습니다.
-
-            ※ 사용자는 문서를 자유롭게 편집하거나 제출 용도로 활용할 수 있습니다.
             """
 )
 def download_docx(request: CodeRequest):
@@ -263,12 +223,12 @@ def download_docx(request: CodeRequest):
 
     # 2. 문서 객체 생성
     doc = Document()
-    doc.add_heading("📄 AI 기반 보안 분석 리포트", 0)
-    doc.add_paragraph(f"📅 분석 일시: {timestamp}")
-    doc.add_paragraph(f"🔖 예측된 취약점 라벨: {final_label}")
-    doc.add_paragraph(f"📊 보안 점수: {final_score}")
-    doc.add_paragraph(f"🛡️ 분석 요약 메시지: {final_msg}")
-    doc.add_paragraph("📄 상세 보안 리포트:")
+    doc.add_heading("AI 기반 보안 분석 리포트", 0)
+    doc.add_paragraph(f"분석 일시: {timestamp}")
+    doc.add_paragraph(f"예측된 취약점 라벨: {final_label}")
+    doc.add_paragraph(f"보안 점수: {final_score}")
+    doc.add_paragraph(f"분석 요약 메시지: {final_msg}")
+    doc.add_paragraph("상세 보안 리포트:")
     doc.add_paragraph(gpt_report)
 
     # 3. 파일 저장
