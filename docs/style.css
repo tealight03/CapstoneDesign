@@ -87,11 +87,18 @@ button:hover {
 
 .section-card {
     background-color: #f7f9fc;
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: 1.2rem;
+    margin: 0.5rem 0;
     border-left: 5px solid #007bff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.section-card h3 {
+    margin: 0.4rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .summary {
