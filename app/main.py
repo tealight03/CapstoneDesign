@@ -1,18 +1,38 @@
 import os
 import re
-from fastapi import FastAPI
-from pydantic import BaseModel
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import torch.nn.functional as F
 from openai import OpenAI
+from fastapi import FastAPI, Body
+from pydantic import BaseModel, Field
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-# FastAPI 앱 생성
-app = FastAPI()
+# FastAPI 앱 생성(Swagger 문서 정보 포함함)
+app = FastAPI(
+    title = 'AI 기반 코드 보안 분석기 API',
+    description = "CodeBERT와 GPT API를 활용해 코드의 보안 취약점을 자동 탐지하고, 보안 리포트를 생성하는 API입니다.",
+    version = "1.0.0",
+    contact = {
+        "email": "davin0706@gmail.com",
+        "url": "https://github.com/tealight03/CapstoneDesign"
+    }
+)
 
 # 입력 스키마
 class CodeRequest(BaseModel):
-    code: str
+    code: str = Field(
+        ...,
+        description = "보안 분석할 소스 코드 (Python)",
+        example = "user_input = input('Enter ID: ')\nsql = 'SELECT * FROM users WHERE id = ' + user_input"
+    )
+    
+# 응답 스키마
+class AnalyzeResponse(BaseModel):
+    prediction: str = Field(..., description="분석 결과 메시지")
+    label: str = Field(..., description="예측된 보안 취약점 라벨 (예: SQL_Injection, Safe_Code 등)")
+    security_score: int = Field(..., description="0~100 사이의 보안 점수 (낮을수록 취약함)")
+    report: str = Field(..., description="GPT API가 작성한 보안 분석 보고서")
+    model_reference: dict = Field(..., description="CodeBERT 모델의 원래 예측 결과")
 
 # 모델 경로를 Hugging Face 경로로 설정
 model_path = "davin0706/codebert-finetuned-v5"
@@ -123,8 +143,8 @@ def extract_label_from_report(report: str) -> str:
     return None
 
 # ✅ API 엔드포인트
-@app.post("/analyze")
-def analyze(request: CodeRequest):
+@app.post("/analyze", summary = "소스 코드 보안 분석", response_model = AnalyzeResponse)
+def analyze(request: CodeRequest = Body(...)):
     # 1. CodeBERT 결과
     bert_result = analyze_code(request.code)
 
