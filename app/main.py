@@ -160,19 +160,22 @@ def extract_label_from_report(report: str) -> str:
             candidate = match.group(1).strip().replace(" ", "_")
             print(f"🔍 [정규식 매칭] 추출된 candidate: '{candidate}'")
 
-            # 안전한 코드로 판명되었을 경우
+            # Safe_Code 의심되면, 다른 취약점 키워드가 존재하는지 추가 탐색
             if candidate == "Safe_Code":
                 for item in score_map.values():
-                    if item["label"] != "Safe_Code" and item["label"] in report:
-                        print(f"⚠️ Safe_Code 오탐 감지, 대체 라벨 사용: '{item['label']}'")
-                        return item["label"]
+                    if item["label"] != "Safe_Code":
+                        # 공백 버전도 함께 확인
+                        alt = item["label"].replace("_", " ")
+                        if alt in report or item["label"] in report:
+                            print(f"⚠️ Safe_Code 오탐 감지, 대체 라벨 사용: '{item['label']}'")
+                            return item["label"]
             print(f"✅ 최종 선택된 라벨 (정규식 기준): '{candidate}'")
             return candidate
 
-        # fallback: 정규식 실패 시, 본문 내에서 수동 탐색
+        # fallback: report 내 keyword로 직접 포함 여부 확인
         for item in score_map.values():
-            if item["label"] in report:
-                print(f"🔁 [본문 탐색] '{item['label']}' 라벨이 보고서에 직접 포함되어 있음")
+            if item["label"].replace("_", " ") in report or item["label"] in report:
+                print(f"🔁 [본문 탐색] '{item['label']}' 라벨이 보고서에 포함되어 있음")
                 return item["label"]
 
     except Exception as e:
