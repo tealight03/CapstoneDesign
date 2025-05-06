@@ -4,6 +4,7 @@ import torch
 import uuid
 import datetime
 import torch.nn.functional as F
+from markdown import markdown
 from weasyprint import HTML
 from openai import OpenAI
 from fastapi import FastAPI, Body
@@ -209,60 +210,34 @@ def analyze(request: CodeRequest = Body(...)):
             PDF 파일 형식으로 다운로드할 수 있습니다.
             """
 )
+def generate_pdf_report(request: CodeRequest):
+    from docx import Document  # 다른 곳과 충돌 방지용
+    from weasyprint import HTML
+    from markdown import markdown
 
-def download_pdf(request: CodeRequest):
-    # 1. CodeBERT 분석
-    bert_result = analyze_code(request.code)
+    # 1. 분석 결과 생성
+    result = analyze_code(request.code)
+    gpt_report = generate_report(request.code, result["label"])
 
-    # 2. GPT 리포트 생성
-    gpt_report = generate_report(request.code, bert_result["label"])
-    gpt_label = extract_label_from_report(gpt_report)
+    # 2. 마크다운을 HTML로 변환
+    html_content = markdown(f"""
+# AI 보안 분석 리포트
 
-    # 3. 최종 결과 반영
-    final_label = gpt_label or bert_result["label"]
-    final_score = bert_result["security_score"]
-    final_msg = bert_result["prediction"]
+- 날짜: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+- 라벨: **{result['label']}**
+- 점수: **{result['security_score']}**
 
-    # 4. HTML 리포트 내용 생성
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    html_content = f"""
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
-            body {{ font-family: 'Arial'; padding: 20px; }}
-            h1 {{ color: #2c3e50; }}
-            h3 {{ color: #34495e; }}
-            pre {{
-                background-color: #f4f4f4;
-                padding: 1em;
-                border-radius: 5px;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-                font-size: 0.95em;
-            }}
-        </style>
-    </head>
-    <body>
-        <h1>📄 AI 기반 보안 분석 리포트</h1>
-        <p><strong>📅 분석 일시:</strong> {timestamp}</p>
-        <hr>
-        <h3>🔖 예측된 취약점 라벨: <code>{final_label}</code></h3>
-        <h3>📊 보안 점수: <strong>{final_score}</strong></h3>
-        <h3>🛡️ 분석 요약 메시지:</h3>
-        <p>{final_msg}</p>
-        <h3>📄 상세 분석 리포트:</h3>
-        <pre>{gpt_report}</pre>
-    </body>
-    </html>
-    """
+---
 
-    # 5. 파일명 생성 및 PDF로 저장
-    filename = f"report_{uuid.uuid4().hex[:8]}.pdf"
-    HTML(string=html_content).write_pdf(filename)
+{gpt_report}
+    """)
 
-    # 6. PDF 파일 반환
-    return FileResponse(filename, media_type="application/pdf", filename="Security_Report.pdf")
+    # 3. HTML → PDF
+    file_name = f"report_{uuid.uuid4().hex}.pdf"
+    output_path = f"/tmp/{file_name}"
+    HTML(string=html_content).write_pdf(output_path)
+
+    return FileResponse(output_path, filename="report.pdf", media_type="application/pdf")
 
 # API 분석 보고서 docx 다운로드
 @app.post("/report/docx", 
