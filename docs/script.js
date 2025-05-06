@@ -31,11 +31,10 @@ async function analyzeCode() {
         const parsedSections = sections.map(section => marked.parse(section.trim())).join("<hr>");
 
         resultBox.innerHTML = `
-            <p>🛡️ <strong>${data.prediction}</strong></p>
-            <p>🔖 <strong>라벨:</strong> ${data.label}</p>
-            <p>📊 <strong>보안 점수:</strong> ${data.security_score}</p>
+            <h3>🛡️ <strong>${data.prediction}</strong></h3>
+            <h3>🔖 <strong>라벨:</strong> ${data.label}</h3>
+            <h3>📊 <strong>보안 점수:</strong> ${data.security_score}</h3>
             <h3>📄 보안 분석 리포트</h3>
-            <hr>
             ${parsedSections}
         `;
     } catch (error) {
