@@ -3,3 +3,5 @@ uvicorn
 transformers
 torch
 openai
+weasyprint
+python-docx

@@ -1,10 +1,15 @@
 import os
 import re
 import torch
+import uuid
+import datetime
 import torch.nn.functional as F
+from weasyprint import HTML
 from openai import OpenAI
 from fastapi import FastAPI, Body
 from pydantic import BaseModel, Field
+from docx import Document
+from fastapi.responses import FileResponse
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # FastAPI 앱 생성(Swagger 문서 정보 포함함)
@@ -189,3 +194,105 @@ def analyze(request: CodeRequest = Body(...)):
         "report": gpt_report,
         "model_reference": bert_result
     }
+
+# API 분석 보고서 pdf 다운로드
+@app.post("/report/pdf", 
+            summary="PDF 형식의 취약점 보고서 다운로드",
+            description="""
+            입력된 소스 코드를 기반으로 CodeBERT와 GPT API를 활용해 보안 취약점을 분석하여
+            취약점 종류, 점수, 설명, 공격 시나리오, 보완 방안이 포함된 분석 보고서를
+            PDF 파일 형식으로 다운로드할 수 있습니다.
+            """
+)
+
+def download_pdf(request: CodeRequest):
+    # 1. CodeBERT 분석
+    bert_result = analyze_code(request.code)
+
+    # 2. GPT 리포트 생성
+    gpt_report = generate_report(request.code, bert_result["label"])
+    gpt_label = extract_label_from_report(gpt_report)
+
+    # 3. 최종 결과 반영
+    final_label = gpt_label or bert_result["label"]
+    final_score = bert_result["security_score"]
+    final_msg = bert_result["prediction"]
+
+    # 4. HTML 리포트 내용 생성
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    html_content = f"""
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {{ font-family: 'Arial'; padding: 20px; }}
+            h1 {{ color: #2c3e50; }}
+            h3 {{ color: #34495e; }}
+            pre {{
+                background-color: #f4f4f4;
+                padding: 1em;
+                border-radius: 5px;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                font-size: 0.95em;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>📄 AI 기반 보안 분석 리포트</h1>
+        <p><strong>📅 분석 일시:</strong> {timestamp}</p>
+        <hr>
+        <h3>🔖 예측된 취약점 라벨: <code>{final_label}</code></h3>
+        <h3>📊 보안 점수: <strong>{final_score}</strong></h3>
+        <h3>🛡️ 분석 요약 메시지:</h3>
+        <p>{final_msg}</p>
+        <h3>📄 상세 분석 리포트:</h3>
+        <pre>{gpt_report}</pre>
+    </body>
+    </html>
+    """
+
+    # 5. 파일명 생성 및 PDF로 저장
+    filename = f"report_{uuid.uuid4().hex[:8]}.pdf"
+    HTML(string=html_content).write_pdf(filename)
+
+    # 6. PDF 파일 반환
+    return FileResponse(filename, media_type="application/pdf", filename="Security_Report.pdf")
+
+# API 분석 보고서 docx 다운로드
+@app.post("/report/docx", 
+            summary="DOCX 형식의 취약점 보고서 다운로드", 
+            description="""
+            입력된 소스 코드를 기반으로 CodeBERT와 GPT API를 활용해 보안 취약점을 분석하여
+            취약점 종류, 점수, 설명, 공격 시나리오, 보완 방안이 포함된 분석 보고서를
+            Word 파일 형식으로 다운로드할 수 있습니다.
+
+            ※ 사용자는 문서를 자유롭게 편집하거나 제출 용도로 활용할 수 있습니다.
+            """
+)
+def download_docx(request: CodeRequest):
+    # 1. 모델 예측 및 리포트 생성
+    bert_result = analyze_code(request.code)
+    gpt_report = generate_report(request.code, bert_result["label"])
+    gpt_label = extract_label_from_report(gpt_report)
+
+    final_label = gpt_label or bert_result["label"]
+    final_score = bert_result["security_score"]
+    final_msg = bert_result["prediction"]
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    # 2. 문서 객체 생성
+    doc = Document()
+    doc.add_heading("📄 AI 기반 보안 분석 리포트", 0)
+    doc.add_paragraph(f"📅 분석 일시: {timestamp}")
+    doc.add_paragraph(f"🔖 예측된 취약점 라벨: {final_label}")
+    doc.add_paragraph(f"📊 보안 점수: {final_score}")
+    doc.add_paragraph(f"🛡️ 분석 요약 메시지: {final_msg}")
+    doc.add_paragraph("📄 상세 보안 리포트:")
+    doc.add_paragraph(gpt_report)
+
+    # 3. 파일 저장
+    filename = f"report_{uuid.uuid4().hex[:8]}.docx"
+    doc.save(filename)
+
+    return FileResponse(filename, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document", filename="Security_Report.docx")
