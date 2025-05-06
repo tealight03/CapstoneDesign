@@ -11,6 +11,7 @@ from fastapi import FastAPI, Body
 from pydantic import BaseModel, Field
 from docx import Document
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # FastAPI 앱 생성(Swagger 문서 정보 포함함)
@@ -22,6 +23,15 @@ app = FastAPI(
         "email": "davin0706@gmail.com",
         "url": "https://github.com/tealight03/CapstoneDesign"
     }
+)
+
+# CORS 설정
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 입력 스키마
