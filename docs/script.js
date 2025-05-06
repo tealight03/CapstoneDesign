@@ -24,17 +24,29 @@ async function analyzeCode() {
         // 📌 이후 내용만 남기고 앞부분 제거
         const coreReport = data.report.split("📌")[1] || "";
 
-        // 이모지 기준으로 보고서 내용 분할
-        const sections = coreReport.split(/\n(?=📌|💣|🛠|✅)/).filter(Boolean);
+        // 이모지 기준으로 구역 분할
+        const sections = coreReport.split(/\n(?=💣|🛠|✅)/).filter(Boolean);
 
-        // 마크다운 렌더링 + 구역마다 <hr>로 구분
-        const parsedSections = sections.map(section => marked.parse(section.trim())).join("<hr>");
+        // 맨 앞 섹션에만 📌 이모지를 수동으로 붙임
+        if (sections.length > 0) {
+            sections[0] = "📌 " + sections[0].trim();
+        }
 
+        // 섹션을 카드 형식으로 예쁘게 표현
+        const parsedSections = sections.map(section => `
+            <div class="section-card">
+                ${marked.parse(section.trim())}
+            </div>
+        `).join("");
+
+        // 전체 결과 출력
         resultBox.innerHTML = `
-            <h3>🛡️ <strong>${data.prediction}</strong></h3>
-            <h3>🔖 <strong>라벨:</strong> ${data.label}</h3>
-            <h3>📊 <strong>보안 점수:</strong> ${data.security_score}</h3>
-            <h3>📄 보안 분석 리포트</h3>
+            <div class="summary">
+                <strong>🛡️ 예측 결과:</strong> ${data.prediction}<br>
+                <strong>🔖 라벨:</strong> ${data.label}<br>
+                <strong>📊 보안 점수:</strong> ${data.security_score}<br>
+                <strong>📄 보안 분석 리포트:</strong>
+            </div>
             ${parsedSections}
         `;
     } catch (error) {
