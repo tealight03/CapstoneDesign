@@ -78,7 +78,7 @@ def analyze_code(code_snippet: str):
     }
 
 # ✅ GPT 리포트 생성 함수
-def generate_report(code_snippet: str) -> str:
+def generate_report(code_snippet: str, label: str) -> str:
     prompt = f"""
 당신은 보안 분석 전문가입니다.
 모델 분석 결과, 아래의 소스 코드에서 감지된 취약점은 **'{label}'** 입니다.
@@ -165,7 +165,7 @@ def analyze(request: CodeRequest = Body(...)):
     gpt_report = generate_report(request.code)
 
     # 3. GPT 보고서에서 라벨 추출
-    gpt_label = extract_label_from_report(gpt_report)
+    gpt_label = extract_label_from_report(gpt_report, label=bert_result["label"])
 
     # 4. GPT 라벨이 존재하고, CodeBERT 라벨과 다르다면 GPT 결과를 반영
     if gpt_label and gpt_label != bert_result["label"]:
