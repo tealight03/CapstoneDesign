@@ -3,7 +3,7 @@
 프로젝트 기획서부터 프로젝트 결과물, 주차별 연구일지를 순차적으로 정리할 계획입니다.
 
 ## 📌 프로젝트 기획서
-<a href="https://github.com/tealight03/CapstoneDesign/blob/main/%EC%BA%A1%EC%8A%A4%ED%86%A4%EB%94%94%EC%9E%90%EC%9D%B8_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EA%B3%84%ED%9A%8D%EC%84%9C_%EA%B9%80%EB%8B%A4%EB%B9%88.pdf" target="_blank">
+<a href="https://github.com/tealight03/CapstoneDesign/blob/main/%EC%BA%A1%EC%8A%A4%ED%86%A4%EB%94%94%EC%9E%90%EC%9D%B8_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EA%B8%B0%ED%9A%8D%EC%84%9C_%EA%B9%80%EB%8B%A4%EB%B9%88.pdf" target="_blank">
 AI 기반 코드 보안 분석기 개발 프로젝트 기획서</a>
 
 ## 📑 주차별 연구일지
