@@ -44,16 +44,18 @@ async function analyzeCode() {
         // 카드 섹션으로 내용 구성
         const parsedSections = sections.map(section => {
             const lines = section.trim().split('\n');
-            let title = lines[0].trim().replace(/\*\*/g, '');  // 마크다운 bold 제거
+            let title = lines[0].trim().replace(/\*\*/g, '');  // ✅ ** 제거
             const body = lines.slice(1).join('\n');
         
             return `
                 <div class="section-card">
                     <h3>${title}</h3>
-                    <div class="section-body">${marked.parse(body)}</div>
+                    <div class="section-body">
+                        ${marked.parse(body)}
+                    </div>
                 </div>
             `;
-        }).join("");
+        }).join("");        
         
         // 전체 결과 출력
         resultBox.innerHTML = `
