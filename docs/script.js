@@ -44,8 +44,8 @@ async function analyzeCode() {
         // 카드 섹션으로 내용 구성
         const parsedSections = sections.map(section => {
             const lines = section.trim().split('\n');
-            const title = lines[0].trim();              // 📌 ~~~ 제목
-            const body = lines.slice(1).join('\n');     // 나머지 본문
+            let title = lines[0].trim().replace(/\*\*/g, '');  // 마크다운 bold 제거
+            const body = lines.slice(1).join('\n');
         
             return `
                 <div class="section-card">
@@ -54,7 +54,7 @@ async function analyzeCode() {
                 </div>
             `;
         }).join("");
-
+        
         // 전체 결과 출력
         resultBox.innerHTML = `
             ${headerSection}
